@@ -32,17 +32,18 @@ slot {
 .header {
   font-family: "Montserrat", sans-serif;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   position: relative;
   height: 76px;
   border-bottom: 1px solid #e7e7e7;
 }
 .header__nav {
   display: flex;
+  width: 50%;
+  justify-content: flex-start;
 }
 .header__logo {
-  position: absolute;
-  left: 94px;
+  padding-left: 94px;
   display: flex;
   align-items: center;
   height: 100%;
@@ -61,6 +62,10 @@ slot {
 .header__link-text {
   padding-right: 24px;
 }
+
+.header__link-text:hover {
+  color: black;
+}
 .footer {
   font-family: "Montserrat", sans-serif;
   box-sizing: border-box;
@@ -75,4 +80,9 @@ slot {
 .footer__text {
   margin: 0;
 }
+@media screen and (max-width: 560px) {
+  .header__logo {
+    padding-left: 0;
+  }
+ }
 </style>

@@ -71,7 +71,7 @@ function formatAgeData(age) {
 }
 
 .form-section__title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
   margin: 0;
 }
@@ -118,5 +118,10 @@ function formatAgeData(age) {
   align-items: center;
   border-radius: 5px;
   box-sizing: border-box;
+}
+@media screen and (max-width: 560px) {
+  .main {
+    padding-left: 10px;
+  }
 }
 </style>

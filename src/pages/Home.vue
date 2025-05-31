@@ -33,10 +33,21 @@ function submitForm() {
   if (!parentAge.value.trim()) {
     parentAgeError.value = 'Поле обязательно для заполнения'
     hasError = true
+  } else if (isNaN(Number(parentAge.value))) {
+    parentAgeError.value = 'Напишите возраст числом (пример: 25)'
+    hasError = true
   } else {
     parentAgeError.value = ''
   }
 
+  children.value.forEach((child) => {
+    if (isNaN(Number(child.age))) {
+      child.error = 'Напишите возраст числом (пример: 25)'
+      hasError = true
+    } else {
+      child.error = ''
+    }
+  })
 
   store.saveFormData(
     { name: parentName.value, age: parentAge.value },
@@ -77,7 +88,7 @@ watch(parentAge, (newValue) => {
 
       <section class="form-section form-section--children">
         <div class="form-section__header">
-          <h2 class="form-section__title">Дети (макс. 5)</h2>
+          <h2 class="form-section__title" v-show="children.length > 0">Дети (макс. 5) </h2>
           <button 
             class="form-section__add-btn" 
             @click="addChild" 
@@ -94,6 +105,7 @@ watch(parentAge, (newValue) => {
           <label class="form-section__field">
             <span class="form-section__name">Возраст</span>
             <input type="text" class="form-section__input" v-model="child.age" />
+            <span v-if="child.error" id="form-section__error">{{ child.error }}</span>
           </label>
           <button class="form-section__remove-btn" @click="removeChild(index)">Удалить</button>
         </div>
@@ -118,8 +130,7 @@ watch(parentAge, (newValue) => {
 }
 
 .form-section__title {
-  font-size: 18px;
-  font-weight: 400;
+  font-size: 16px;
 }
 
 .form-section__header {
@@ -188,6 +199,13 @@ watch(parentAge, (newValue) => {
   border-radius: 24px;
   font-size: 16px;
   cursor: pointer;
+  position: relative;
+  right: 0;
+  margin-left: auto;
+}
+
+.form-section__add-btn:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .form-section__remove-btn {
@@ -216,4 +234,23 @@ watch(parentAge, (newValue) => {
   font-size: 16px;
   cursor: pointer;
 }
+
+.main__submit-btn:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+@media screen and (max-width: 560px) {
+  .main {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .form-section__group--child {
+    flex-direction: column;
+  }
+  .form-section__group--child .form-section__field {
+    flex: initial;
+  }
+  .form-section__group--child {
+    gap: 0px;
+  }
+ }
 </style>
