@@ -2,26 +2,51 @@
 import AppLayout from "../components/Applayout.vue"
 import { useFormStore } from '../stores/store.js'
 const store = useFormStore()
+
+function formatAgeData(age) {
+  const n = Number(age)
+  const lastDigit = n % 10
+
+  if (lastDigit === 1) {
+    return `${n} год`
+  }
+  if (11 <= n <= 14) {
+    return `${n} лет`
+  }  
+
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return `${n} года`
+  }
+
+  return `${n} лет`
+}
 </script>
+
 <template>
 <AppLayout>
-  <div v-if="store.parent.name == '' || store.parent.age == ''" class="main">
+  <div v-if="store.parent.name == '' && store.parent.age == ''" class="main">
     <p class="main__header">Данные не добавлены</p>
+  </div>
+  <div v-else-if="store.parent.name == ''" class="main">
+    <p class="main__header">Внесите в форму информацию об имени</p>
+  </div>
+  <div v-else-if="store.parent.age == ''" class="main">
+    <p class="main__header">Внесите в форму информацию о возрасте</p>
   </div>
   <main v-else class="main">
       <section class="form-section form-section--personal">
         <h2 class="form-section__title">Персональные данные</h2>
         <div class="form-section__group">
-          {{ store.parent.name + ', ' + store.parent.age }}
+          {{ store.parent.name + ', ' + formatAgeData(store.parent.age) }}
         </div>
       </section>
 
-      <section class="form-section form-section--children">
+      <section v-if="store.children.length > 0" class="form-section form-section--children">
           <h2 class="form-section__title">Дети</h2>
         <div  class="form-section__group--child">
           <ul class="form-section__group--list">
             <li v-for="(child, index) in store.children" :key="index" class="form-section__group--list-elem">
-              <div>{{ child.name + ', ' + child.age }}</div>
+              <div>{{ child.name + ', ' + formatAgeData(child.age) }}</div>
             </li>
           </ul>
         </div>
@@ -34,6 +59,7 @@ const store = useFormStore()
 .main {
   font-family: "Montserrat", sans-serif;
   max-width: 616px;
+  width: 100%;
   margin: auto;
   height: auto;
   box-sizing: border-box;

@@ -21,6 +21,14 @@
 </template>
 
 <style lang="css" scoped>
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+slot {
+    flex: 1;
+}
 .header {
   font-family: "Montserrat", sans-serif;
   display: flex;
@@ -61,7 +69,8 @@
   height: 76px;
   width: 100%;
   padding-top: 30px;
-  margin-top: 30px;
+  margin-top: auto;
+
 }
 .footer__text {
   margin: 0;

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useFormStore } from '@/stores/store.js'
 import AppLayout from "../components/AppLayout.vue"
@@ -9,7 +9,8 @@ const store = useFormStore()
 
 const parentName = ref('')
 const parentAge = ref('')
-
+const parentAgeError = ref('')
+const parentNameError = ref('')
 const children = ref([])
 
 function addChild() {
@@ -23,12 +24,30 @@ function removeChild(index) {
 }
 
 function submitForm() {
+  if (!parentName.value.trim()) {
+    parentNameError.value = 'Поле обязательно для заполнения'
+    hasError = true
+  } else {
+    parentNameError.value = ''
+  }
+  if (!parentAge.value.trim()) {
+    parentAgeError.value = 'Поле обязательно для заполнения'
+    hasError = true
+  } else {
+    parentAgeError.value = ''
+  }
+
+
   store.saveFormData(
     { name: parentName.value, age: parentAge.value },
     children.value
   )
   router.push('/preview')
 }
+
+watch(parentAge, (newValue) => {
+  parentAgeError.value = isNaN(Number(newValue)) && newValue !== '' ? 'Напишите возраст числом (пример: 25)' : ''
+})
 </script>
 
 
@@ -41,10 +60,17 @@ function submitForm() {
           <label class="form-section__field">
             <span class="form-section__name">Имя</span>
             <input type="text" class="form-section__input" v-model="parentName"/>
+            <span v-if="parentNameError" id="form-section__error">{{ parentNameError }}</span>
           </label>
           <label class="form-section__field">
             <span class="form-section__name">Возраст</span>
-            <input type="text" class="form-section__input" v-model="parentAge"/>
+            <input 
+              type="text" 
+              class="form-section__input" 
+              v-model="parentAge"
+              :class="{ 'input--error': parentAgeError }"
+            />
+            <span v-if="parentAgeError" id="form-section__error">{{ parentAgeError }}</span>
           </label>
         </div>
       </section>
@@ -52,7 +78,10 @@ function submitForm() {
       <section class="form-section form-section--children">
         <div class="form-section__header">
           <h2 class="form-section__title">Дети (макс. 5)</h2>
-          <button class="form-section__add-btn" @click="addChild">
+          <button 
+            class="form-section__add-btn" 
+            @click="addChild" 
+            v-show="children.length < 5">
             <img class="form-section__add-btn-img"src="../assets/icons/plus.svg" alt="plus"/>
             <span class="form-section__add-btn-description">Добавить ребёнка</span>
           </button>
@@ -79,10 +108,13 @@ function submitForm() {
 .main {
   font-family: "Montserrat", sans-serif;
   max-width: 616px;
+  width: 100%;
   margin: auto;
   height: auto;
   box-sizing: border-box;
   margin-top: 30px;
+  flex: 1;
+  margin-bottom: 30px;
 }
 
 .form-section__title {
@@ -135,6 +167,12 @@ function submitForm() {
 .form-section__input:focus {
   outline: none;
   box-shadow: none;
+}
+
+#form-section__error {
+  color: red;
+  font-size: 10px;
+  margin-top:6px;
 }
 
 .form-section__add-btn {
