@@ -46,7 +46,7 @@ function formatAgeData(age) {
         <div  class="form-section__group--child">
           <ul class="form-section__group--list">
             <li v-for="(child, index) in store.children" :key="index" class="form-section__group--list-elem">
-              <div>{{ child.name + ', ' + formatAgeData(child.age) }}</div>
+              <div v-show="child.name !== ''">{{ child.name + ', ' + formatAgeData(child.age) }}</div>
             </li>
           </ul>
         </div>
