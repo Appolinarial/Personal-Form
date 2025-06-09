@@ -1,5 +1,5 @@
 <script setup>
-import AppLayout from "../components/Applayout.vue"
+import AppLayout from "../components/AppLayout.vue"
 import { useFormStore } from '../stores/store.js'
 const store = useFormStore()
 
